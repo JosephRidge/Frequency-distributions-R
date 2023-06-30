@@ -1,15 +1,16 @@
 ---
 title: "Assignment 1"
 author: "Joseph Ridge - 166895"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 <hr/>
 
 ##### Installing of libraries -> ggplot2
-
 ```{r}
 # check if library already installed and install if does not exist then import
-installedStatus <- any(grepl("stream", installed.packages()))
+installedStatus <- any(grepl("ggplot2", installed.packages()))
 if(!installedStatus){
 install.packages("ggplot2")  # Install ggplot2 package if not already installed
 }
@@ -20,7 +21,17 @@ library(ggplot2)  # Load the ggplot2 package
 
 ###  **1.  Every week the number of missed calls was recorded in a certain company switchboard.  This was done for 50 weeks and the observations were tabulated as shown below; **
 
-![](https://github.com/JosephRidge/My-Portfolio/assets/42699812/e8d69f6b-3cac-4bdc-b55f-ab078d9c7733)
+| **Number of missed calls**  | **Number of weeks** |  
+| :---   |    :----:   |    
+ |11-15  |2 |
+ |16-20  |3 |
+ |21-25  |4 |
+ |26-30  |11|
+ |31-35  |14|
+ |36-40  |6 |
+ |41-45  |7 |
+ |46-50  |2 |
+ |51-55  |1 |
 
 **sln.**
 
@@ -30,11 +41,11 @@ numberOfMissedCalls <- c("11-15", "16-20", "21-25", "26-30", "31-35", "36-40", "
 numberOfWeeks <- c(2, 3, 4, 11, 14, 6, 7, 2, 1)
 cummulativeFrequency <- cumsum(numberOfWeeks)# Calculate the cumulative frequency
 
-# display inform of a table -> dataframe
+# display inform of a table -> data-frame
 data <- data.frame(
   numberOfMissedCall = numberOfMissedCalls,
   numberOfWeeks = numberOfWeeks,
-  cummulativeFrequency =cummulativeFrequency 
+  cumulativeFrequency =cummulativeFrequency 
 )
 
 data 
@@ -43,11 +54,11 @@ data
 ggplot(data, aes(x = numberOfMissedCalls, y = cummulativeFrequency,group=1)) +
   geom_line() +
   geom_point() +
-  labs(x = "Number of Missed Calls", y = "Cumulative Frequency") +
- 
+  labs(x = "Number of Missed Calls", y = "Cumulative Frequency" ) 
 ```
-  #### Figure 1. Number of Missed Calls against frequency Orgive Graph 
+  <div align="center">Figure 1. Number of Missed Calls against frequency -  Orgive Graph </div> 
 <hr/>
+
 ### **2. The examination marks in a statistics test, for 72 students were as follows:**
 **Data : **
 36	62	15	28	60	30	25	35	75	14	16	33	58	72	80	92	44	57	55	56	70	34	40	18	15	28	32	60	57	68	83	30	32	40	38	45	48	52	58	62	65	75	84	63	58	47	55	60	38	25	18	29	15	32	35	38	45	43	46	53	58	64	68	54	59	60	61	64	65	70	78	90
@@ -55,7 +66,6 @@ ggplot(data, aes(x = numberOfMissedCalls, y = cummulativeFrequency,group=1)) +
 **goal: Using a class interval of 10, that is 10 – 19; 20 – 29… make a frequency distribution table.**
 
 **sln.**
-
 ```{r}
 # create vector for the students marks
 data <- c(36, 62, 15, 28, 60, 30, 25, 35, 75, 14, 16, 33, 58, 72, 80, 92, 44, 57, 55, 56, 70, 34, 40, 18, 15, 28, 32, 60, 57, 68, 83, 30, 32, 40, 38, 45, 48, 52, 58, 62, 65, 75, 84, 63, 58, 47, 55, 60, 38, 25, 18, 29, 15, 32, 35, 38, 45, 43, 46, 53, 58, 64, 68, 54, 59, 60, 61, 64, 65, 70, 78, 90)
@@ -111,22 +121,11 @@ dataFrame <- data.frame(
   cf = cummulativeFreq,
   rf  = relativeFreq
 )
-dataFrame
 ```
-
-#### Table 1. Examination Marks in a Statistics Test
+<div align="center"><strong>Table 1. Examination Marks in a Statistics Test </strong></div>
 ```{r}
 dataFrame
 ```
-
- 
-
-
-
-
-
-
-
 <hr/>
 ### **3. The number of people who attended an agricultural show in one day was 510 men, 1080 women and some children. When the information was represented on a pie chart, the combined angle for the men and children was 216. Find the angle representing the children.**
 
@@ -146,8 +145,28 @@ numberOfChildren <- (totalPopulationAttended - (numberOfMen + numberOFWomen))
 degreeOfChildren <- numberOfChildren * 360/ totalPopulationAttended
 # angle representing children
 degreeOfChildren 
+degreeOfMen <- degreeOfChildrenNmen - degreeOfChildren
 
+degrees <- data.frame(
+  children = degreeOfChildren, 
+  women = degreeOfWomen,
+  men = degreeOfMen)
+
+group <- c("Women","Children", "Men")
+deg <- c(degreeOfWomen, degreeOfChildren,degreeOfMen)
+
+df <- data.frame(deg = deg,
+                 group = group)
+#plot graph 
+ggplot(df, aes(x = "", y = deg, fill = group)) +
+  geom_col(color = "white") +
+  geom_text(aes(label = deg),
+            position = position_stack(vjust = 0.5)) +
+  coord_polar(theta = "y") + 
+  scale_fill_manual(values = c("#559CAD", "#2C497F", "#FFA9E7"))+
+  theme_void()
 ```
+<div align="center"> <strong>Figure 1. Population Attended An Agricultural</strong></div>
 <hr/>
 
 ### **4. You have conducted a market survey with a sample size of 50 regarding the acceptability of a new product that your company wants to launch. The scores of the respondents on the appropriate scale are as follows: **
@@ -160,16 +179,26 @@ degreeOfChildren
 
 ```{r}
 #create a vector 
-data <- c(40, 45, 41, 45, 45, 30, 39, 8, 48, 25, 26, 9, 23, 24, 26, 29, 8, 40, 41, 42, 39, 35, 18, 25, 35, 40, 42, 43, 44, 36, 27, 32, 28, 27, 25, 26, 38, 37, 36, 35, 32, 28, 40, 41, 43, 44, 45, 40, 39, 411)
+data <- c(40, 45, 41, 45, 45, 30, 39, 8, 48, 25, 26, 9, 23, 24, 26, 29, 8, 40, 41, 42, 39, 35, 18, 25, 35, 40, 42, 43, 44, 36, 27, 32, 28, 27, 25, 26, 38, 37, 36, 35, 32, 28, 40, 41, 43, 44, 45, 40, 39, 41)
 data <- sort(data)
-data 
+```
+```{r}
 stem(data)
 ```
-
+<div align="center"> <strong>Figure 3. Product Market Acceptance Survey </strong></div>
+<hr/>
 ### **5. Plot a frequency polygon for the data below.**
 
-![](https://github.com/JosephRidge/My-Portfolio/assets/42699812/b94b59a6-43eb-459c-beed-0ee6469bc5a2)
-
+| **Marks**  | **F** |  
+| :---   |    :----:   |    
+ |5-9   |2 |
+ |10-14  |5 |
+ |15-19  |3 |
+ |20-24  |7|
+ |25-29  |12|
+ |30-34  |10|
+ |35-39  |6 |
+ |40-44  |4| 
 
 **sln.**
 
@@ -187,12 +216,9 @@ dataFrame <- data.frame(
 ggplot(dataFrame, aes(x = classInterval, y = marks, group = 1)) + 
     geom_point()+
     geom_line()+
-  labs(x = "marks", y = "frequency") 
-# Kindly note: I had a challenge with using geom_freqpoly() method kindly assist in this
-
-```
-#### Figure 1. Frequency Polygon based on Marks achieved
-
+   labs(x = "marks", y = "frequency") 
+``` 
+<div align="center"><strong> Figure 3. Frequency Polygon based on Marks achieved</strong></div>
 <hr/>
 
 ### **6. A sample consists of 34 observations recorded correct to the nearest integer, ranging in value from 201 to 337. If it is decided to use seven classes of width 20 integers and to begin the first class limit at 199.5, find the class limits and the class mid – points of the seven classes.	**
@@ -211,84 +237,64 @@ LCB <-199.5
 smallVal <- LCB
 #largest value 
 largeVal <- 337
-# width
+# width (stated from above instructions)
 w <- 20
-# number of classes
-k = 7
+# number of classes(stated from above instructions)
+k <- 7
 
 # attain the lower class boundaries
 breaks <- seq(smallVal, largeVal+w , w) 
 
 # concatenate into classes
 classLabels <- paste0("", breaks[-length(breaks)], "-", breaks[-1] - 1, "")
-classLabels <- as.vector(classLabels) 
-classLabels
+classLabels <- as.vector(classLabels)  
 
 #mid points => (LCB +UCB)/2
 midPoints<-paste0(breaks[-length(breaks)]) 
-midPoints <- as.vector((breaks[-length(breaks)] +(breaks[-1]-1))/2)
-midPoints
+midPoints <- as.vector((breaks[-length(breaks)] +(breaks[-1]-1))/2) 
 
 dataFrame <- data.frame(
   class= classLabels,
   midPoints = midPoints 
 )
 ```
-#### Table 2. Observations with their respective midpoints
-
+<div align="center"> <strong>Table 2. Observations with their respective mid-points</strong></div>
 ```{r}
 dataFrame
 ```
-
-##**7. In a sample study about coffee habit in two towns, the following information was received:**
+<hr/>
+### **7. In a sample study about coffee habit in two towns, the following information was received:**
 Town A:	Females were 40%; Total coffee drinkers were 45% and male non – coffee drinkers were 20%.
 Town B:	Males were 55%; Male non – coffee drinkers were 30% and female coffee drinkers were 15%.
 Represent the above data in tabular form.
 
 **sln.**
 ```{r}
-# town a - observations are in perecentage
-townAdataFrame <- data.frame(
-  femalePopulation = 40,
-  coffeeDrinkersInPopulation = 45,
-  maleNonCoffeeDrinkers =20
+# Town A and B - observations are in percentage
+
+data <- data.frame(
+  Town = c("A", "A", "B", "B"),
+  Gender = c("Female", "Male", "Female", "Male"),
+  coffeeDrinkers = c(0.40, 0.05, 0.15, 0.30),
+  nonCoffeeDrinkers = c(0.60, 0.95, 0.85, 0.70)
 )
-
-townAdataFrame
-
-townBdataFrame <- data.frame(
-  malePopulation = 55,
-  maleNonCoffeeDrinkers =30,
-  femaleCoffeeDrinkers = 15
-)
-
-townBdataFrame
-
-# representation as df
-df <- data.frame(
-  TownA = townAdataFrame,
-  TownB = townBdataFrame
-)
-
-# representation as table
-table <- table(
-  TownA = townAdataFrame,
-  TownB = townBdataFrame
-) 
-
 ```
-
-#### Table 3. Combination of Coffee drinking Habits in Town A and Town B based on gender
-
+<div align="center"> <strong>Table 3. Combination of Coffee drinking Habits in Town A and Town B based</strong></div> 
 ```{r} 
-table
+data
 ```
-
-
-
+<hr/>
 ### **8. Represent the following data by means of a histogram	**
 
-![](https://github.com/JosephRidge/My-Portfolio/assets/42699812/57a61933-d39c-4af3-b421-2cd372d03845)
+| **Weekly wages(in 00Ksh)**  | **No. of workers** |  
+| :---   |    :----:   |    
+ |10-15  |7 |
+ |15-20  |19|
+ |20-25  |27|
+ |25-30  |15|
+ |30-40  |12|
+ |40-60  |12|
+ |60-80  |8 | 
 
 **sln.**
 
@@ -303,7 +309,7 @@ dataFrame <- data.frame(
 )
 #using ggplot we layer till we plot our histogram
 ggplot(dataFrame, aes(x=class, y=numOfWorker  )) +   
- geom_histogram(stat="identity", width=2)+
-  labs(x = "Weekly Wages ( in 00Ksh. )", y = "No. of Workers") 
+ geom_histogram(stat="identity",fill = "#559CAD")+
+  labs(x = "Weekly Wages ( in 00Ksh. )", y = "No. of Workers")  
 ```
-#### Figure 2. Weekly Wages against No. Of Workers 
+<div align="center"> <strong>Figure 4. Weekly Wages against No. Of Workers </strong></div>
