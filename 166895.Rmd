@@ -1,9 +1,9 @@
 ---
 title: "ORGANISING AND CONDENSING DATA - HOME- WORK"
-author: "Joseph Ridge - 166895"
+author: "Ogada Joseph Ridge - 166895"
 output:
-  html_notebook: default
   pdf_document: default
+  html_notebook: default
 ---
 <hr/>
 
@@ -34,7 +34,6 @@ library(ggplot2)  # Load the ggplot2 package
  |51-55  |1 |
 
 **sln.**
-
 ```{r}
 # data
 numberOfMissedCalls <- c("11-15", "16-20", "21-25", "26-30", "31-35", "36-40", "41-45", "46-50", "51-55")
@@ -130,7 +129,6 @@ dataFrame
 ### **3. The number of people who attended an agricultural show in one day was 510 men, 1080 women and some children. When the information was represented on a pie chart, the combined angle for the men and children was 216. Find the angle representing the children.**
 
 **sln.**
-
 ```{r}
 numberOfMen <-510
 numberOFWomen <- 1080 
@@ -143,8 +141,7 @@ degreeOfWomen <- 360 - 216 # meaning women rep 144 degrees
 totalPopulationAttended <- numberOFWomen *360/degreeOfWomen 
 numberOfChildren <- (totalPopulationAttended - (numberOfMen + numberOFWomen))
 degreeOfChildren <- numberOfChildren * 360/ totalPopulationAttended
-# angle representing children
-degreeOfChildren 
+
 degreeOfMen <- degreeOfChildrenNmen - degreeOfChildren
 
 degrees <- data.frame(
@@ -157,16 +154,28 @@ deg <- c(degreeOfWomen, degreeOfChildren,degreeOfMen)
 
 df <- data.frame(deg = deg,
                  group = group)
+# convert to percentage 
+childrenPercentage <- signif(((numberOfChildren/totalPopulationAttended)*100),4)
+childrenPercentage <- paste0(childrenPercentage,"%") 
+menPercentage <- signif(((numberOfMen/totalPopulationAttended)*100),4)
+menPercentage<- paste0(menPercentage,"%") 
+womenPercentage <- signif(((numberOFWomen/totalPopulationAttended)*100),4)
+womenPercentage <- paste0(womenPercentage,"%") 
+
+percentages <- c(womenPercentage,childrenPercentage,menPercentage)
+
 #plot graph 
 ggplot(df, aes(x = "", y = deg, fill = group)) +
   geom_col(color = "white") +
-  geom_text(aes(label = deg),
+  geom_text(aes(label = percentages),
             position = position_stack(vjust = 0.5)) +
   coord_polar(theta = "y") + 
   scale_fill_manual(values = c("#559CAD", "#2C497F", "#FFA9E7"))+
   theme_void()
+# angle representing children 
+paste0("Children are represented by ",degreeOfChildren,"°, in the pie-chart") 
 ```
-<div align="center"> <strong>Figure 1. Population Attended An Agricultural</strong></div>
+<div align="center"> <strong>Figure 1. Population Attended An Agricultural Show</strong></div>
 <hr/>
 
 ### **4. You have conducted a market survey with a sample size of 50 regarding the acceptability of a new product that your company wants to launch. The scores of the respondents on the appropriate scale are as follows: **
@@ -176,7 +185,6 @@ ggplot(df, aes(x = "", y = deg, fill = group)) +
 **Goal: Prepare a Stem – and – leaf plot of the distribution.	**
 
 **sln.**
-
 ```{r}
 #create a vector 
 data <- c(40, 45, 41, 45, 45, 30, 39, 8, 48, 25, 26, 9, 23, 24, 26, 29, 8, 40, 41, 42, 39, 35, 18, 25, 35, 40, 42, 43, 44, 36, 27, 32, 28, 27, 25, 26, 38, 37, 36, 35, 32, 28, 40, 41, 43, 44, 45, 40, 39, 41)
@@ -185,7 +193,7 @@ data <- sort(data)
 ```{r}
 stem(data)
 ```
-<div align="center"> <strong>Figure 3. Product Market Acceptance Survey </strong></div>
+<div align="center"> <strong>Figure 2. Product Market Acceptance Survey </strong></div>
 <hr/>
 ### **5. Plot a frequency polygon for the data below.**
 
